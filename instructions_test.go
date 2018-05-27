@@ -648,3 +648,66 @@ func TestStaIndirectY(t *testing.T) {
 
 	Teardown()
 }
+
+func TestStxZeroPage(t *testing.T) {
+	Setup()
+
+	cpu.Registers.X = 0xff
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x86)
+	cpu.Memory.Write(0x0100, 0x86)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0101, 0x84)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0084) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStxZeroPageY(t *testing.T) {
+	Setup()
+
+	cpu.Registers.X = 0xff
+	cpu.Registers.Y = 0x01
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x96)
+	cpu.Memory.Write(0x0100, 0x96)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0101, 0x84)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0085) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStxAbsolute(t *testing.T) {
+	Setup()
+
+	cpu.Registers.X = 0xff
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x8e)
+	cpu.Memory.Write(0x0100, 0x8e)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0102, 0x00)
+	cpu.Memory.Write(0x0102, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0084) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}

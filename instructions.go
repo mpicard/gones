@@ -149,4 +149,15 @@ func (instructions InstructionTable) InitInstructions() {
 				return
 			}})
 	}
+
+	for _, o := range []OpCode{0x86, 0x8e, 0x96} {
+		opcode := o
+		instructions.AddInstruction(&Instruction{
+			Mneumonic: "STX",
+			OpCode:    opcode,
+			Exec: func(cpu *CPU) (status InstructionStatus) {
+				cpu.Stx(cpu.rmwAddress(opcode, &status))
+				return
+			}})
+	}
 }

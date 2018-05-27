@@ -471,3 +471,8 @@ func (cpu *CPU) Ldy(address uint16) {
 func (cpu *CPU) Sta(address uint16) {
 	cpu.Memory.Write(address, cpu.Registers.A)
 }
+
+// Stx stores X in memory address
+func (cpu *CPU) Stx(address uint16) {
+	cpu.Memory.Write(address, cpu.Registers.X)
+}
