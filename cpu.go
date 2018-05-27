@@ -424,7 +424,12 @@ func (cpu *CPU) setZNFlags(value uint8) uint8 {
 // CPU Instructions
 // ================
 
-// Lda loads a byte of memory into A, setting Z and N flags as required
+// Lda loads A with memory address, setting Z and N, if required
 func (cpu *CPU) Lda(address uint16) {
 	cpu.Registers.A = cpu.setZNFlags(cpu.Memory.Read(address))
+}
+
+// Ldx loads X with memory address, setting Z and N, if required
+func (cpu *CPU) Ldx(address uint16) {
+	cpu.Registers.X = cpu.setZNFlags(cpu.Memory.Read(address))
 }

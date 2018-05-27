@@ -188,3 +188,164 @@ func TestLdaAbsoluteY(t *testing.T) {
 
 	Teardown()
 }
+
+func TestLdxImmediate(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xa2)
+	cpu.Memory.Write(0x0101, 0xff)
+
+	cpu.Execute()
+
+	if cpu.Registers.X != 0xff {
+		t.Error("Register X is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestLdxZeroPage(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xa6)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0084, 0xff)
+
+	cpu.Execute()
+
+	if cpu.Registers.X != 0xff {
+		t.Error("Register X is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestLdxZeroPageY(t *testing.T) {
+	Setup()
+
+	cpu.Registers.Y = 0x01
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xb6)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0085, 0xff)
+
+	cpu.Execute()
+
+	if cpu.Registers.X != 0xff {
+		t.Error("Register X is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestLdxAbsolute(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xae)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0102, 0x00)
+	cpu.Memory.Write(0x0084, 0xff)
+
+	cpu.Execute()
+
+	if cpu.Registers.X != 0xff {
+		t.Error("Register X is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestLdxAbsoluteY(t *testing.T) {
+	Setup()
+
+	cpu.Registers.Y = 1
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xbe)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0102, 0x00)
+	cpu.Memory.Write(0x0085, 0xff)
+
+	cpu.Execute()
+
+	if cpu.Registers.X != 0xff {
+		t.Error("Register X is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestLdxZFlagSet(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xa2)
+	cpu.Memory.Write(0x0101, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Registers.P&Z == 0 {
+		t.Error("Z flag is not set")
+	}
+
+	Teardown()
+}
+
+func TestLdxZFlagUnset(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xa2)
+	cpu.Memory.Write(0x0101, 0x01)
+
+	cpu.Execute()
+
+	if cpu.Registers.P&Z != 0 {
+		t.Error("Z flag is set")
+	}
+
+	Teardown()
+}
+
+func TestLdxNFlagSet(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xa2)
+	cpu.Memory.Write(0x0101, 0x81)
+
+	cpu.Execute()
+
+	if cpu.Registers.P&N == 0 {
+		t.Error("N flag is not set")
+	}
+
+	Teardown()
+}
+
+func TestLdxNFlagUnset(t *testing.T) {
+	Setup()
+
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0xa2)
+	cpu.Memory.Write(0x0101, 0x01)
+
+	cpu.Execute()
+
+	if cpu.Registers.P&N != 0 {
+		t.Error("N flag is set")
+	}
+
+	Teardown()
+}
