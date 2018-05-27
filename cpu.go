@@ -466,3 +466,8 @@ func (cpu *CPU) Ldx(address uint16) {
 func (cpu *CPU) Ldy(address uint16) {
 	cpu.Registers.Y = cpu.setZNFlags(cpu.Memory.Read(address))
 }
+
+// Sta stores A in memory address
+func (cpu *CPU) Sta(address uint16) {
+	cpu.Memory.Write(address, cpu.Registers.A)
+}

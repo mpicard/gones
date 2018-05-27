@@ -137,4 +137,16 @@ func (instructions InstructionTable) InitInstructions() {
 				return
 			}})
 	}
+
+	// STA
+	for _, o := range []OpCode{0x85, 0x95, 0x8d, 0x9d, 0x99, 0x81, 0x91} {
+		opcode := o
+		instructions.AddInstruction(&Instruction{
+			Mneumonic: "STA",
+			OpCode:    opcode,
+			Exec: func(cpu *CPU) (status InstructionStatus) {
+				cpu.Sta(cpu.aluAddress(opcode, &status))
+				return
+			}})
+	}
 }

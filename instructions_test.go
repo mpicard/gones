@@ -510,3 +510,141 @@ func TestLdyNFlagUnset(t *testing.T) {
 
 	Teardown()
 }
+
+func TestStaZeroPage(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x85)
+	cpu.Memory.Write(0x0101, 0x84)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0084) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStaZeroPageX(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.X = 0x01
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x95)
+	cpu.Memory.Write(0x0101, 0x84)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0085) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStaAbsolute(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x8d)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0102, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0084) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStaAbsoluteX(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.X = 1
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x9d)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0102, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0085) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStaAbsoluteY(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.Y = 1
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x99)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0102, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0085) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStaIndirectX(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.X = 1
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x81)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0085, 0x87)
+	cpu.Memory.Write(0x0086, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0087) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
+
+func TestStaIndirectY(t *testing.T) {
+	Setup()
+
+	cpu.Registers.A = 0xff
+	cpu.Registers.Y = 1
+	cpu.Registers.PC = 0x0100
+
+	cpu.Memory.Write(0x0100, 0x91)
+	cpu.Memory.Write(0x0101, 0x84)
+	cpu.Memory.Write(0x0084, 0x86)
+	cpu.Memory.Write(0x0085, 0x00)
+
+	cpu.Execute()
+
+	if cpu.Memory.Read(0x0087) != 0xff {
+		t.Error("Memory is not 0xff")
+	}
+
+	Teardown()
+}
