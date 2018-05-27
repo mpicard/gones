@@ -92,6 +92,29 @@ func (instructions InstructionTable) Execute(cpu *CPU, opcode OpCode) (cycles ui
 	return
 }
 
+func (instructions InstructionTable) AddInstruction(inst *Instruction) {
+	instructions.opcodes[inst.OpCode] = inst
+}
+
+func (instructions InstructionTable) RemoveInstruction(opcode OpCode) {
+	instructions.opcodes[opcode] = nil
+}
+
 func (instructions InstructionTable) InitInstructions() {
 	// http://www.thealmightyguru.com/Games/Hacking/Wiki/index.php?title=6502_Opcodes
+
+	// Storage
+	// =======
+
+	// LDA
+	for _, o := range []OpCode{0xa1, 0xa5, 0xa9, 0xad, 0xb1, 0xb5, 0xb9, 0xbd} {
+		opcode := o
+		instructions.AddInstruction(&Instruction{
+			Mneumonic: "LDA",
+			OpCode:    opcode,
+			Exec: func(cpu *CPU) (status InstructionStatus) {
+				cpu.Lda(cpu.aluAddress(opcode, &status))
+				return
+			}})
+	}
 }
