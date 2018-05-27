@@ -278,6 +278,34 @@ func (cpu *CPU) rmwAddress(opcode OpCode, status *InstructionStatus) (address ui
 	return
 }
 
+func (cpu *CPU) controlAddress(opcode OpCode, status *InstructionStatus) (address uint16) {
+	// control opcodes end with 00
+	if opcode&0x10 == 0 {
+		switch (opcode >> 2) & 0x03 {
+		case 0x00:
+			address = cpu.immediateAddress()
+		case 0x01:
+			address = cpu.zeroPageAddress()
+		case 0x02:
+			address = 0 // UNUSED
+		case 0x03:
+			address = cpu.absoluteAddress()
+		}
+	} else {
+		switch (opcode >> 2) & 0x03 {
+		case 0x00:
+			address = cpu.relativeAddress()
+		case 0x01:
+			address = cpu.indexedZeroPageAddress(X)
+		case 0x02:
+			address = 0 // UNUSED
+		case 0x03:
+			address = cpu.indexedAbsoluteAddress(X, status)
+		}
+	}
+	return
+}
+
 // E.1
 func (cpu *CPU) zeroPageAddress() (result uint16) {
 	result = uint16(cpu.Memory.Read(cpu.Registers.PC))
@@ -432,4 +460,9 @@ func (cpu *CPU) Lda(address uint16) {
 // Ldx loads X with memory address, setting Z and N, if required
 func (cpu *CPU) Ldx(address uint16) {
 	cpu.Registers.X = cpu.setZNFlags(cpu.Memory.Read(address))
+}
+
+// Ldy loads Y with memory address, setting Z and N, if required
+func (cpu *CPU) Ldy(address uint16) {
+	cpu.Registers.Y = cpu.setZNFlags(cpu.Memory.Read(address))
 }

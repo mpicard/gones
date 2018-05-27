@@ -125,4 +125,16 @@ func (instructions InstructionTable) InitInstructions() {
 				return
 			}})
 	}
+
+	// LDY
+	for _, o := range []OpCode{0xa0, 0xa4, 0xb4, 0xac, 0xbc} {
+		opcode := o
+		instructions.AddInstruction(&Instruction{
+			Mneumonic: "LDY",
+			OpCode:    o,
+			Exec: func(cpu *CPU) (status InstructionStatus) {
+				cpu.Ldy(cpu.controlAddress(opcode, &status))
+				return
+			}})
+	}
 }
