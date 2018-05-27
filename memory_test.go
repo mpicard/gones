@@ -10,12 +10,10 @@ func TestSamePage(t *testing.T) {
 			} else if a>>8 != b>>8 && SamePage(a, b) {
 				t.Errorf("Bad result for SamePage(%#04x, %#04x)\n", a, b)
 			}
-
 			if b == 0xff00 {
 				break
 			}
 		}
-
 		if a == 0xff00 {
 			break
 		}

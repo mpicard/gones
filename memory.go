@@ -9,8 +9,8 @@ const DEFAULT_MEMORY_SIZE uint32 = 65536
 
 type Memory interface {
 	Reset()
-	Fetch(address uint16) (value uint8)
-	Store(address uint16, value uint8) (oldValue uint8)
+	Read(address uint16) (value uint8)
+	Write(address uint16, value uint8) (oldValue uint8)
 }
 
 type BasicMemory struct {
@@ -47,7 +47,7 @@ func (mem *BasicMemory) Reset() {
 	}
 }
 
-func (mem *BasicMemory) Fetch(address uint16) (value uint8) {
+func (mem *BasicMemory) Read(address uint16) (value uint8) {
 	if mem.disableReads {
 		value = 0xff
 	} else {
@@ -56,7 +56,7 @@ func (mem *BasicMemory) Fetch(address uint16) (value uint8) {
 	return
 }
 
-func (mem *BasicMemory) Store(address uint16, value uint8) (oldValue uint8) {
+func (mem *BasicMemory) Write(address uint16, value uint8) (oldValue uint8) {
 	if !mem.disabledWrites {
 		oldValue = mem.m[address]
 		mem.m[address] = value
